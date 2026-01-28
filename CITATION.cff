@@ -4,8 +4,8 @@ type: software
 title: "LSAS Specification: Layered Safety and Accuracy System"
 abstract: "Technical specification and whitepaper for governed Generative AI outputs in regulated healthcare and medtech environments."
 authors:
-  - family-names: "React Labs"
-    name: "React Labs Development Team"
+  - family-names: "Inference Stack"
+    name: "Inference-Stack.com AI Consultancy of Matt Vegas"
 repository-code: "https://github.com/reactlabs-dev/lsas-spec"
 url: "https://github.com/reactlabs-dev/lsas-spec"
 license: Apache-2.0
