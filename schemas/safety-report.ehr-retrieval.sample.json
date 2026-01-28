@@ -1,0 +1,212 @@
+{
+  "lsas_version": "1.0.0",
+  "report_id": "lsasrpt_ehr_2b7f51a1",
+  "request": {
+    "id": "req_8b2b0c5e",
+    "timestamp_utc": "2026-01-28T20:12:40Z",
+    "tenant_id": "tenant_demo_healthsystem",
+    "environment": "prod",
+    "output_type": "text",
+    "channel": "assistant_ui",
+    "actor": {
+      "type": "clinician_staff",
+      "id": "user_anon",
+      "role": "care_coordinator",
+      "facility_id": "facility_demo_01"
+    }
+  },
+  "classification": {
+    "risk_level": "high",
+    "domains": ["hipaa", "privacy", "security", "ehr_tooling"],
+    "policy_packs": {
+      "hipaa": "1.0.0",
+      "security": "1.0.0",
+      "ehr_tools": "0.1.0"
+    },
+    "capabilities": {
+      "citations_required": true,
+      "live_retrieval": "required_for_regulatory_claims",
+      "code_generation": "disabled",
+      "tool_use": "allowed_allowlist_only",
+      "store_raw_content": false
+    },
+    "rationale": [
+      "User request triggers patient-data access path (ePHI).",
+      "EHR tool use is privileged and requires minimum-necessary constraints.",
+      "Outputs may contain PHI and must be handled with strict retention controls."
+    ],
+    "routing": {
+      "validator_profile": "deep",
+      "timeouts": {
+        "classification_ms": 150,
+        "retrieval_ms": 800,
+        "validation_fast_ms": 1500,
+        "validation_deep_ms": 8000
+      }
+    }
+  },
+  "prompt_handling": {
+    "raw_prompt_policy": "not_stored",
+    "redaction_applied": true,
+    "redaction_summary": [
+      "Removed direct identifiers (names, MRNs) where present.",
+      "Replaced patient reference with a tokenized patient handle."
+    ],
+    "tokenized_patient_handle": "ptok_4f9c8a0d"
+  },
+  "grounding": {
+    "claim_map_ref": "claim-map.ehr-retrieval.sample.json",
+    "citations_required": true,
+    "sources": [
+      {
+        "source_id": "HHS_MIN_NECESSARY",
+        "title": "HHS Minimum Necessary Requirement",
+        "url": "https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/minimum-necessary-requirement/index.html",
+        "retrieved_utc": "2026-01-28T20:00:00Z",
+        "hash": "sha256:REDACTED_EXAMPLE_HASH",
+        "evidence_grade": "A"
+      },
+      {
+        "source_id": "OWASP_LLM02",
+        "title": "OWASP LLM02: Insecure Output Handling",
+        "url": "https://genai.owasp.org/llmrisk2023-24/llm02-insecure-output-handling/",
+        "retrieved_utc": "2026-01-28T20:02:00Z",
+        "hash": "sha256:REDACTED_EXAMPLE_HASH",
+        "evidence_grade": "B"
+      }
+    ]
+  },
+  "tools": {
+    "tool_firewall": {
+      "enabled": true,
+      "policy_enforcement_point": "lsas_pep_v1",
+      "default_high_risk_behavior": "validate_and_constrain_or_deny",
+      "allowlist": [
+        {
+          "tool_id": "ehr.read.labs",
+          "allowed_actions": ["get_latest_lab"],
+          "required_constraints": ["purpose_of_use", "patient_scope", "lab_code_filter"],
+          "rbac_required_roles": ["care_coordinator", "rn", "md", "np", "pa"]
+        }
+      ]
+    },
+    "requests": [
+      {
+        "request_id": "toolreq_01",
+        "proposed_by": "model",
+        "tool_id": "ehr.read.labs",
+        "action": "get_latest_lab",
+        "params_original": {
+          "patient_handle": "ptok_4f9c8a0d",
+          "lab_code": "HBA1C",
+          "time_window_days": 365,
+          "purpose_of_use": null
+        },
+        "policy_validation": {
+          "rbac_check": "PASS",
+          "purpose_of_use_check": "FAIL",
+          "minimum_necessary_check": "WARN",
+          "notes": [
+            "purpose_of_use is required for patient-data tool calls.",
+            "time_window_days=365 exceeds minimal scope for 'latest' lab request."
+          ]
+        },
+        "decision": "DENY",
+        "deny_reason_codes": ["MISSING_PURPOSE_OF_USE"],
+        "timestamp_utc": "2026-01-28T20:12:44Z"
+      },
+      {
+        "request_id": "toolreq_02",
+        "proposed_by": "pep",
+        "tool_id": "ehr.read.labs",
+        "action": "get_latest_lab",
+        "params_constrained": {
+          "patient_handle": "ptok_4f9c8a0d",
+          "lab_code": "HBA1C",
+          "time_window_days": 120,
+          "purpose_of_use": "treatment",
+          "minimum_necessary_mode": true
+        },
+        "pep_transformations": [
+          "Injected purpose_of_use from authenticated workflow context (treatment).",
+          "Constrained time_window_days from 365 → 120 to match minimum necessary for latest lab retrieval."
+        ],
+        "policy_validation": {
+          "rbac_check": "PASS",
+          "purpose_of_use_check": "PASS",
+          "minimum_necessary_check": "PASS",
+          "parameter_schema_validation": "PASS"
+        },
+        "decision": "ALLOW",
+        "execution": {
+          "executed": true,
+          "executed_utc": "2026-01-28T20:12:45Z",
+          "result_handling": {
+            "raw_result_stored": false,
+            "result_hash": "sha256:REDACTED_EXAMPLE_HASH",
+            "fields_returned": ["lab_code", "value", "unit", "observed_utc"],
+            "fields_suppressed": ["patient_name", "mrn", "ordering_provider", "encounter_details"]
+          }
+        },
+        "timestamp_utc": "2026-01-28T20:12:45Z"
+      }
+    ]
+  },
+  "validators": [
+    {
+      "name": "phi_pii_detector",
+      "status": "PASS",
+      "latency_ms": 22,
+      "findings": []
+    },
+    {
+      "name": "tool_use_policy_gate",
+      "status": "PASS",
+      "latency_ms": 55,
+      "findings": [
+        {
+          "severity": "info",
+          "code": "PEP_CONSTRAINT_APPLIED",
+          "title": "Tool request constrained for minimum necessary",
+          "description": "PEP enforced required constraints and narrowed time window."
+        }
+      ]
+    },
+    {
+      "name": "insecure_output_handling_gate",
+      "status": "PASS",
+      "latency_ms": 40,
+      "findings": []
+    },
+    {
+      "name": "evidence_citation_gate",
+      "status": "PASS",
+      "latency_ms": 65,
+      "findings": []
+    }
+  ],
+  "escalation": {
+    "action": "none",
+    "notes": "Tool call allowed after deterministic constraint enforcement. No HITL required under current policy pack."
+  },
+  "output": {
+    "artifact_hash": "sha256:REDACTED_EXAMPLE_HASH",
+    "contains_phi": true,
+    "storage_policy": "no_raw_retention_hash_only",
+    "response_summary": {
+      "lab_code": "HBA1C",
+      "value": 7.2,
+      "unit": "%",
+      "observed_utc": "2025-12-14T15:22:00Z"
+    },
+    "citations_attached": [
+      "HHS_MIN_NECESSARY",
+      "OWASP_LLM02"
+    ]
+  },
+  "telemetry": {
+    "total_latency_ms": 610,
+    "validation_mode": "deep",
+    "cost_estimate_usd": 0.06
+  }
+}

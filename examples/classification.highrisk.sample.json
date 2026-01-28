@@ -1,0 +1,32 @@
+{
+  "classification_version": "1.0.0",
+  "risk_level": "high",
+  "domains": ["hipaa", "security", "accessibility"],
+  "required_policy_packs": [
+    {"id": "hipaa", "version": "1.0.0"},
+    {"id": "security", "version": "1.0.0"},
+    {"id": "a11y", "version": "1.0.0"}
+  ],
+  "capabilities": {
+    "citations_required": true,
+    "live_retrieval": "required_for_regulatory_claims",
+    "code_generation": "allowed_with_full_validators",
+    "tool_use": "disabled_by_default",
+    "store_raw_content": false
+  },
+  "routing": {
+    "validator_profile": "deep",
+    "escalation_default": "clarify_or_hitl",
+    "timeouts": {
+      "classification_ms": 150,
+      "retrieval_ms": 800,
+      "validation_fast_ms": 1500,
+      "validation_deep_ms": 8000
+    }
+  },
+  "rationale": [
+    "Request involves regulated-domain guidance (HIPAA/privacy posture).",
+    "Output could influence production handling of sensitive data.",
+    "Accessibility and secure coding constraints apply."
+  ]
+}

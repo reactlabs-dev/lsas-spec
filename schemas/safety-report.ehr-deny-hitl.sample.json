@@ -1,0 +1,256 @@
+{
+  "lsas_version": "1.0.0",
+  "report_id": "lsasrpt_ehr_deny_9c11e7d4",
+  "request": {
+    "id": "req_3d8f0f19",
+    "timestamp_utc": "2026-01-28T21:07:22Z",
+    "tenant_id": "tenant_enterprise_healthsystem",
+    "environment": "prod",
+    "output_type": "text",
+    "channel": "assistant_ui",
+    "actor": {
+      "type": "clinician_staff",
+      "id": "user_anon",
+      "role": "care_coordinator",
+      "facility_id": "facility_north_demo_01"
+    }
+  },
+  "classification": {
+    "risk_level": "high",
+    "domains": ["hipaa", "privacy", "security", "ehr_tooling"],
+    "policy_packs": {
+      "hipaa": "1.0.0",
+      "security": "1.0.0",
+      "ehr_tools": "0.2.0",
+      "hitl": "0.1.0"
+    },
+    "capabilities": {
+      "citations_required": true,
+      "live_retrieval": "required_for_regulatory_claims",
+      "code_generation": "disabled",
+      "tool_use": "allowed_allowlist_only",
+      "store_raw_content": false
+    },
+    "rationale": [
+      "Request triggers access to ePHI via EHR tools.",
+      "User request is broad and lacks purpose-of-use constraints.",
+      "High-risk posture requires minimum-necessary enforcement and tool firewall."
+    ],
+    "routing": {
+      "validator_profile": "deep",
+      "timeouts": {
+        "classification_ms": 150,
+        "retrieval_ms": 800,
+        "validation_fast_ms": 1500,
+        "validation_deep_ms": 8000
+      }
+    }
+  },
+  "prompt_handling": {
+    "raw_prompt_policy": "not_stored",
+    "redaction_applied": true,
+    "redaction_summary": [
+      "Removed direct identifiers (names, MRNs) where present.",
+      "Replaced patient reference with a tokenized patient handle."
+    ],
+    "tokenized_patient_handle": "ptok_aa31c9f0"
+  },
+  "grounding": {
+    "claim_map_ref": "claim-map.ehr-deny-hitl.sample.json",
+    "citations_required": true,
+    "sources": [
+      {
+        "source_id": "HHS_MIN_NECESSARY",
+        "title": "HHS Minimum Necessary Requirement",
+        "url": "https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/minimum-necessary-requirement/index.html",
+        "retrieved_utc": "2026-01-28T20:55:00Z",
+        "hash": "sha256:REDACTED_EXAMPLE_HASH",
+        "evidence_grade": "A"
+      },
+      {
+        "source_id": "OWASP_LLM02",
+        "title": "OWASP LLM02: Insecure Output Handling",
+        "url": "https://genai.owasp.org/llmrisk2023-24/llm02-insecure-output-handling/",
+        "retrieved_utc": "2026-01-28T20:58:00Z",
+        "hash": "sha256:REDACTED_EXAMPLE_HASH",
+        "evidence_grade": "B"
+      }
+    ]
+  },
+  "tools": {
+    "tool_firewall": {
+      "enabled": true,
+      "policy_enforcement_point": "lsas_pep_v1",
+      "default_high_risk_behavior": "deny_or_hitl_on_ambiguity",
+      "allowlist": [
+        {
+          "tool_id": "ehr.search.patients",
+          "allowed_actions": ["search_by_demographics"],
+          "required_constraints": ["purpose_of_use", "patient_scope"],
+          "rbac_required_roles": ["care_coordinator", "rn", "md", "np", "pa"]
+        },
+        {
+          "tool_id": "ehr.read.patient_summary",
+          "allowed_actions": ["get_problem_list", "get_latest_labs", "get_med_list"],
+          "required_constraints": ["purpose_of_use", "patient_scope", "field_allowlist", "time_window_days"],
+          "rbac_required_roles": ["rn", "md", "np", "pa"]
+        }
+      ]
+    },
+    "requests": [
+      {
+        "request_id": "toolreq_01",
+        "proposed_by": "model",
+        "tool_id": "ehr.read.patient_summary",
+        "action": "get_problem_list",
+        "params_original": {
+          "patient_handle": "ptok_aa31c9f0",
+          "time_window_days": 3650,
+          "field_allowlist": "ALL_FIELDS",
+          "purpose_of_use": null,
+          "notes": "Pull everything we have for this patient so we can decide next steps."
+        },
+        "policy_validation": {
+          "rbac_check": "FAIL",
+          "purpose_of_use_check": "FAIL",
+          "minimum_necessary_check": "FAIL",
+          "parameter_schema_validation": "FAIL",
+          "notes": [
+            "Role care_coordinator is not authorized for problem list retrieval under current policy pack.",
+            "purpose_of_use is required for any patient-data read.",
+            "field_allowlist=ALL_FIELDS violates minimum necessary policy.",
+            "time_window_days=3650 exceeds allowed bounds for high-risk retrieval."
+          ]
+        },
+        "decision": "DENY",
+        "deny_reason_codes": [
+          "RBAC_DENY",
+          "MISSING_PURPOSE_OF_USE",
+          "MIN_NECESSARY_VIOLATION",
+          "PARAM_SCHEMA_VIOLATION"
+        ],
+        "timestamp_utc": "2026-01-28T21:07:26Z"
+      }
+    ]
+  },
+  "validators": [
+    {
+      "name": "phi_pii_detector",
+      "status": "PASS",
+      "latency_ms": 21,
+      "findings": []
+    },
+    {
+      "name": "tool_use_policy_gate",
+      "status": "FAIL",
+      "latency_ms": 63,
+      "findings": [
+        {
+          "severity": "high",
+          "code": "EHR_TOOL_DENY",
+          "title": "Denied overbroad EHR tool request",
+          "description": "The proposed tool request violated RBAC and minimum-necessary constraints and lacked required purpose-of-use.",
+          "deny_reason_codes": [
+            "RBAC_DENY",
+            "MISSING_PURPOSE_OF_USE",
+            "MIN_NECESSARY_VIOLATION",
+            "PARAM_SCHEMA_VIOLATION"
+          ],
+          "remediation": [
+            "Confirm purpose-of-use (treatment, operations, payment) and document it.",
+            "Narrow patient scope to a single patient and request only the fields required for the immediate decision.",
+            "Route to HITL if role authorization is unclear or policy exception is required."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "insecure_output_handling_gate",
+      "status": "PASS",
+      "latency_ms": 39,
+      "findings": []
+    },
+    {
+      "name": "evidence_citation_gate",
+      "status": "PASS",
+      "latency_ms": 71,
+      "findings": []
+    }
+  ],
+  "escalation": {
+    "action": "clarify_and_hitl",
+    "reason": "tool_use_denied_high_risk",
+    "clarifying_questions": [
+      {
+        "id": "q1",
+        "question": "What is the purpose of use for this retrieval (treatment, operations, or payment)?",
+        "required": true
+      },
+      {
+        "id": "q2",
+        "question": "Which specific data elements are required for the immediate decision (e.g., latest HbA1c only, current meds, or problem list)?",
+        "required": true
+      },
+      {
+        "id": "q3",
+        "question": "Is your role authorized for this retrieval, or should this be routed to an RN/MD for approval?",
+        "required": true
+      }
+    ],
+    "hitl": {
+      "enabled": true,
+      "route": "ehr_privileged_access_review",
+      "reviewer_roles": ["rn", "md", "compliance_officer"],
+      "requested_artifacts": [
+        "purpose_of_use",
+        "field_allowlist",
+        "time_window_days",
+        "patient_scope_confirmation"
+      ],
+      "sla_target_minutes": 60
+    },
+    "safe_fallback": {
+      "mode": "no_tool_use",
+      "response_type": "guidance_only",
+      "notes": "Returned a compliance-safe path forward with narrowed questions and HITL route. No patient data retrieved."
+    }
+  },
+  "output": {
+    "artifact_hash": "sha256:REDACTED_EXAMPLE_HASH",
+    "contains_phi": false,
+    "storage_policy": "no_raw_retention_hash_only",
+    "fallback_response_outline": [
+      "Explain that the request is too broad for minimum necessary retrieval.",
+      "Ask purpose-of-use and exact fields needed.",
+      "Recommend routing to an authorized clinician role or compliance reviewer for approval.",
+      "Provide a templated, scoped request example."
+    ],
+    "templated_scoped_request_example": {
+      "tool_id": "ehr.read.patient_summary",
+      "action": "get_latest_labs",
+      "params": {
+        "patient_handle": "ptok_aa31c9f0",
+        "lab_code": "HBA1C",
+        "time_window_days": 120,
+        "purpose_of_use": "treatment",
+        "field_allowlist": ["lab_code", "value", "unit", "observed_utc"]
+      }
+    },
+    "citations_attached": ["HHS_MIN_NECESSARY", "OWASP_LLM02"]
+  },
+  "telemetry": {
+    "total_latency_ms": 430,
+    "validation_mode": "deep",
+    "cost_estimate_usd": 0.05,
+    "events": [
+      {
+        "type": "tool_deny",
+        "count": 1
+      },
+      {
+        "type": "hitl_route_created",
+        "count": 1
+      }
+    ]
+  }
+}

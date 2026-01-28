@@ -1,0 +1,115 @@
+{
+  "lsas_version": "1.0.0",
+  "report_id": "lsasrpt_7f3b2a8a",
+  "request": {
+    "id": "req_91c02c44",
+    "timestamp_utc": "2026-01-28T19:31:10Z",
+    "tenant_id": "tenant_demo",
+    "environment": "prod",
+    "output_type": "code",
+    "channel": "ide",
+    "actor": {
+      "type": "developer",
+      "id": "user_anon",
+      "role": "engineer"
+    }
+  },
+  "classification": {
+    "risk_level": "high",
+    "domains": ["hipaa", "security", "accessibility"],
+    "policy_packs": {
+      "hipaa": "1.0.0",
+      "security": "1.0.0",
+      "a11y": "1.0.0"
+    },
+    "capabilities": {
+      "citations_required": true,
+      "live_retrieval": "required_for_regulatory_claims",
+      "code_generation": "allowed_with_full_validators",
+      "tool_use": "disabled_by_default",
+      "store_raw_content": false
+    },
+    "rationale": [
+      "Output affects UI + data-handling surfaces.",
+      "High-risk domains require evidence and strict validators."
+    ]
+  },
+  "grounding": {
+    "claim_map_ref": "claim-map.sample.json",
+    "citations_required": true,
+    "sources": [
+      {
+        "source_id": "HHS_HIPAA_CLOUD",
+        "title": "HHS Guidance on HIPAA and Cloud Computing",
+        "url": "https://www.hhs.gov/hipaa/for-professionals/special-topics/health-information-technology/cloud-computing/index.html",
+        "retrieved_utc": "2026-01-28T19:20:00Z",
+        "hash": "sha256:REDACTED_EXAMPLE_HASH",
+        "evidence_grade": "A"
+      },
+      {
+        "source_id": "WCAG_2_2",
+        "title": "W3C WCAG 2.2",
+        "url": "https://www.w3.org/TR/WCAG22/",
+        "retrieved_utc": "2026-01-28T19:21:00Z",
+        "hash": "sha256:REDACTED_EXAMPLE_HASH",
+        "evidence_grade": "A"
+      }
+    ]
+  },
+  "validators": [
+    {
+      "name": "phi_pii_detector",
+      "status": "PASS",
+      "latency_ms": 18,
+      "findings": []
+    },
+    {
+      "name": "security_sast",
+      "status": "PASS",
+      "latency_ms": 420,
+      "findings": []
+    },
+    {
+      "name": "a11y_baseline",
+      "status": "WARN",
+      "latency_ms": 95,
+      "findings": [
+        {
+          "severity": "medium",
+          "code": "A11Y_FOCUS_MODAL",
+          "title": "Modal focus management not specified",
+          "description": "Ensure focus is trapped within the modal and returns to the triggering element on close.",
+          "remediation": [
+            "Add focus trap behavior and restore focus on close.",
+            "Verify keyboard navigation order is predictable."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "evidence_citation_gate",
+      "status": "PASS",
+      "latency_ms": 60,
+      "findings": []
+    }
+  ],
+  "escalation": {
+    "action": "remediation_checklist",
+    "reason": "a11y_warn",
+    "notes": "Returned code + checklist; flagged a11y focus requirements for verification."
+  },
+  "output": {
+    "artifact_hash": "sha256:REDACTED_EXAMPLE_HASH",
+    "contains_phi": false,
+    "transformations": [
+      "redacted_prompt_context",
+      "added_a11y_remediation_checklist",
+      "attached_required_citations"
+    ]
+  },
+  "telemetry": {
+    "total_latency_ms": 820,
+    "validation_mode": "deep",
+    "cost_estimate_usd": 0.08
+  }
+}

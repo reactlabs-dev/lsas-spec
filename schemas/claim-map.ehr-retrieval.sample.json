@@ -1,0 +1,83 @@
+{
+  "claim_map_version": "1.0.0",
+  "generated_utc": "2026-01-28T20:10:00Z",
+  "evidence_policy": {
+    "grade_a_required_for_high_risk": true,
+    "locator_required_for_grade_a": true,
+    "must_language_requires_grade_a": true,
+    "minimum_citations_for_high_risk_claim": 1
+  },
+  "sources": [
+    {
+      "source_id": "HHS_MIN_NECESSARY",
+      "title": "HHS Minimum Necessary Requirement",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/minimum-necessary-requirement/index.html",
+      "retrieved_utc": "2026-01-28T20:00:00Z",
+      "hash": "sha256:REDACTED_EXAMPLE_HASH",
+      "evidence_grade": "A"
+    },
+    {
+      "source_id": "HHS_SECURITY_RULE",
+      "title": "HHS HIPAA Security Rule (overview)",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/security/index.html",
+      "retrieved_utc": "2026-01-28T20:01:00Z",
+      "hash": "sha256:REDACTED_EXAMPLE_HASH",
+      "evidence_grade": "A"
+    },
+    {
+      "source_id": "OWASP_LLM02",
+      "title": "OWASP LLM02: Insecure Output Handling",
+      "url": "https://genai.owasp.org/llmrisk2023-24/llm02-insecure-output-handling/",
+      "retrieved_utc": "2026-01-28T20:02:00Z",
+      "hash": "sha256:REDACTED_EXAMPLE_HASH",
+      "evidence_grade": "B"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "claim_text": "Patient-data retrieval must be scoped to the minimum necessary for the intended purpose.",
+      "claim_type": "privacy_requirement",
+      "risk_level": "high",
+      "required_evidence_grade": "A",
+      "language_level_allowed": "must",
+      "citations": [
+        {
+          "source_id": "HHS_MIN_NECESSARY",
+          "locator": "Minimum Necessary Requirement — Overview and implementation guidance",
+          "support_score": 0.83
+        }
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "claim_text": "Access to ePHI must be protected by administrative/technical safeguards and auditable controls.",
+      "claim_type": "security_requirement",
+      "risk_level": "high",
+      "required_evidence_grade": "A",
+      "language_level_allowed": "must",
+      "citations": [
+        {
+          "source_id": "HHS_SECURITY_RULE",
+          "locator": "Security Rule — safeguards overview",
+          "support_score": 0.78
+        }
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "claim_text": "Model output must not be executed as privileged tool instructions without validation and policy enforcement.",
+      "claim_type": "llm_security_requirement",
+      "risk_level": "high",
+      "required_evidence_grade": "B",
+      "language_level_allowed": "must",
+      "citations": [
+        {
+          "source_id": "OWASP_LLM02",
+          "locator": "LLM02 — Insecure Output Handling (definition and guidance)",
+          "support_score": 0.81
+        }
+      ]
+    }
+  ]
+}

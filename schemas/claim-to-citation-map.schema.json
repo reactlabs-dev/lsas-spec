@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/claim-to-citation-map.schema.json",
+  "title": "LSAS Claim-to-Citation Map",
+  "type": "object",
+  "required": ["claim_map_version", "generated_utc", "sources", "claims"],
+  "properties": {
+    "claim_map_version": { "type": "string" },
+    "generated_utc": { "type": "string", "format": "date-time" },
+    "evidence_policy": { "type": "object" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "title", "url", "retrieved_utc", "hash"],
+        "properties": {
+          "source_id": { "type": "string" },
+          "title": { "type": "string" },
+          "url": { "type": "string" },
+          "retrieved_utc": { "type": "string", "format": "date-time" },
+          "hash": { "type": "string" },
+          "evidence_grade": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "claim_text", "risk_level", "citations"],
+        "properties": {
+          "claim_id": { "type": "string" },
+          "claim_text": { "type": "string" },
+          "claim_type": { "type": "string" },
+          "risk_level": { "type": "string", "enum": ["low", "medium", "high"] },
+          "required_evidence_grade": { "type": "string" },
+          "language_level_allowed": { "type": "string" },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["source_id", "locator"],
+              "properties": {
+                "source_id": { "type": "string" },
+                "locator": { "type": "string" },
+                "support_score": { "type": "number" }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

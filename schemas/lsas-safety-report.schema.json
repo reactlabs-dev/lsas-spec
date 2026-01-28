@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/lsas-safety-report.schema.json",
+  "title": "LSAS Safety Report",
+  "type": "object",
+  "required": ["lsas_version", "request", "classification", "grounding", "validators", "output"],
+  "properties": {
+    "lsas_version": { "type": "string" },
+    "report_id": { "type": "string" },
+    "request": {
+      "type": "object",
+      "required": ["id", "timestamp_utc", "tenant_id", "environment", "output_type"],
+      "properties": {
+        "id": { "type": "string" },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "tenant_id": { "type": "string" },
+        "environment": { "type": "string" },
+        "output_type": { "type": "string", "enum": ["text", "code"] },
+        "channel": { "type": "string" },
+        "actor": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "classification": { "type": "object", "additionalProperties": true },
+    "grounding": { "type": "object", "additionalProperties": true },
+    "validators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["PASS", "WARN", "FAIL"] },
+          "latency_ms": { "type": "number" },
+          "findings": { "type": "array" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "escalation": { "type": "object", "additionalProperties": true },
+    "output": { "type": "object", "additionalProperties": true },
+    "telemetry": { "type": "object", "additionalProperties": true },
+    "tools": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

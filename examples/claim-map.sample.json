@@ -1,0 +1,83 @@
+{
+  "claim_map_version": "1.0.0",
+  "generated_utc": "2026-01-28T19:30:00Z",
+  "evidence_policy": {
+    "grade_a_required_for_high_risk": true,
+    "locator_required_for_grade_a": true,
+    "must_language_requires_grade_a": true,
+    "minimum_citations_for_high_risk_claim": 1
+  },
+  "sources": [
+    {
+      "source_id": "HHS_HIPAA_CLOUD",
+      "title": "HHS Guidance on HIPAA and Cloud Computing",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/special-topics/health-information-technology/cloud-computing/index.html",
+      "retrieved_utc": "2026-01-28T19:20:00Z",
+      "hash": "sha256:REDACTED_EXAMPLE_HASH",
+      "evidence_grade": "A"
+    },
+    {
+      "source_id": "WCAG_2_2",
+      "title": "W3C WCAG 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/",
+      "retrieved_utc": "2026-01-28T19:21:00Z",
+      "hash": "sha256:REDACTED_EXAMPLE_HASH",
+      "evidence_grade": "A"
+    },
+    {
+      "source_id": "OWASP_LLM02",
+      "title": "OWASP LLM02: Insecure Output Handling",
+      "url": "https://genai.owasp.org/llmrisk2023-24/llm02-insecure-output-handling/",
+      "retrieved_utc": "2026-01-28T19:22:00Z",
+      "hash": "sha256:REDACTED_EXAMPLE_HASH",
+      "evidence_grade": "B"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "claim_text": "A cloud provider that maintains ePHI is typically a business associate even for 'no-view' services.",
+      "claim_type": "regulatory_posture",
+      "risk_level": "high",
+      "required_evidence_grade": "A",
+      "language_level_allowed": "qualified",
+      "citations": [
+        {
+          "source_id": "HHS_HIPAA_CLOUD",
+          "locator": "Cloud Computing Guidance — Business Associate status",
+          "support_score": 0.86
+        }
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "claim_text": "Interactive UI components must be operable via keyboard and maintain predictable focus behavior.",
+      "claim_type": "accessibility_requirement",
+      "risk_level": "medium",
+      "required_evidence_grade": "A",
+      "language_level_allowed": "should",
+      "citations": [
+        {
+          "source_id": "WCAG_2_2",
+          "locator": "2.1.1 Keyboard; 2.4.x focus-related criteria",
+          "support_score": 0.74
+        }
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "claim_text": "Model output must not be treated as executable instructions without validation and sanitization.",
+      "claim_type": "security_requirement",
+      "risk_level": "high",
+      "required_evidence_grade": "B",
+      "language_level_allowed": "must",
+      "citations": [
+        {
+          "source_id": "OWASP_LLM02",
+          "locator": "Definition + guidance summary",
+          "support_score": 0.81
+        }
+      ]
+    }
+  ]
+}
