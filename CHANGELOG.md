@@ -7,64 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned for v1.0.0
+### Planned
+- Worked scenarios expansion (e.g., telehealth workflow, EHR tool firewall, IDE codegen)
+- Operational model deepening (policy pack lifecycle, release gates, HITL workflows)
+- Schema hardening (stricter typing, enums, required fields, versioning strategy)
+- Diagram source standardization (Mermaid sources + optional exports)
 
-This section tracks the release checklist for version 1.0.0.
+> Release checklist note: keep operational checklists in a separate file (e.g., `/RELEASE_CHECKLIST.md`)
+> rather than inside the changelog.
 
-#### Pre-Release Checklist
+---
 
-- [ ] Complete technical whitepaper in `/paper`
-- [ ] Finalize all JSON schemas in `/schemas`
-- [ ] Add comprehensive examples in `/examples`
-- [ ] Review and validate all schemas against examples
-- [ ] Complete API documentation
-- [ ] Add implementation guidelines
-- [ ] Review all documentation for clarity and completeness
-- [ ] Ensure all links in documentation are valid
-- [ ] Add security considerations section
-- [ ] Add compliance guidelines section
+## [1.0.0] - 2026-01-28
 
-#### Code and Schema Quality
+### Added
+- LSAS Technical Whitepaper / Specification v1.0.0 in `/paper`
+- Initial JSON Schemas in `/schemas`:
+  - `lsas-safety-report.schema.json`
+  - `claim-to-citation-map.schema.json`
+- Examples in `/examples`:
+  - Safety Report example(s)
+  - Claim-to-citation map example(s)
+  - Risk classification example(s)
+- Diagrams directory for LSAS visuals (Mermaid and/or exports), if present
+- Documentation updates:
+  - `/examples/README.md` describing example inventory and reading order
+  - Repository README updates reflecting the v1.0.0 spec posture
 
-- [ ] Run schema validation tests
-- [ ] Verify all examples are valid against schemas
-- [ ] Check for schema versioning consistency
-- [ ] Validate JSON syntax in all schema files
-- [ ] Review schema documentation completeness
+### Changed
+- Repository documentation updated to reflect production-grade, citable specification posture
+- README and citation guidance refined for external consumption
 
-#### Documentation Review
-
-- [ ] Technical accuracy review by domain experts
-- [ ] Grammar and spelling check
-- [ ] Consistency check across all documents
-- [ ] Update README with latest information
-- [ ] Ensure CONTRIBUTING.md is up to date
-- [ ] Verify CODE_OF_CONDUCT.md is appropriate
-
-#### Legal and Compliance
-
-- [ ] Verify LICENSE file is correct (Apache 2.0)
-- [ ] Ensure all contributions are properly attributed
-- [ ] Review for any proprietary or sensitive information
-- [ ] Confirm compliance with healthcare regulations (HIPAA, GDPR, etc.)
-
-#### Release Preparation
-
-- [ ] Update version number in CITATION.cff to 1.0.0
-- [ ] Update version in all schema files
-- [ ] Update date-released in CITATION.cff
-- [ ] Write comprehensive release notes
-- [ ] Tag release in git: `git tag -a v1.0.0 -m "Release v1.0.0"`
-- [ ] Create GitHub release with detailed notes
-- [ ] Verify Zenodo DOI generation
-- [ ] Update README badge with new DOI
-- [ ] Announce release to stakeholders
-
-#### Post-Release
-
-- [ ] Monitor for issues reported after release
-- [ ] Update documentation based on feedback
-- [ ] Plan for v1.1.0 features and improvements
+### Security
+- Codified LSAS controls and patterns around:
+  - minimum-necessary boundaries
+  - tool firewall / policy enforcement
+  - prompt injection and exfiltration prevention patterns
+  - audit artifacts for traceability
 
 ---
 
@@ -116,7 +95,3 @@ When adding new versions, use the following format:
 
 ### Security
 - Security fixes and improvements
-```
-
-[Unreleased]: https://github.com/reactlabs-dev/lsas-spec/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/reactlabs-dev/lsas-spec/releases/tag/v0.1.0
