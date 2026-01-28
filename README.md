@@ -1,6 +1,6 @@
 # LSAS Specification
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![DOI](https://zenodo.org/badge/1144538774.svg)](https://doi.org/10.5281/zenodo.18407727)
 
 **LSAS (Layered Safety and Accuracy System)** — Technical specification and whitepaper for governed Generative AI outputs in regulated healthcare and medtech environments.
 
@@ -42,42 +42,6 @@ We use [Semantic Versioning](https://semver.org/) for this specification. For av
 ## Citation
 
 If you use this specification in your research or implementation, please cite it using the metadata in [CITATION.cff](CITATION.cff).
-
-## Minting a DOI via Zenodo
-
-This repository is configured to automatically generate a DOI (Digital Object Identifier) for each release via Zenodo:
-
-### Setup (One-time)
-
-1. Go to [Zenodo GitHub integration](https://zenodo.org/account/settings/github/)
-2. Log in with your GitHub account
-3. Find `reactlabs-dev/lsas-spec` in the repository list
-4. Toggle the switch to enable Zenodo integration
-
-### Creating a Release with DOI
-
-1. Ensure all changes are committed and the repository is ready for release
-2. Update `CHANGELOG.md` with release notes
-3. Update version numbers in `CITATION.cff` and any schema files
-4. Create a new release on GitHub:
-   - Go to the [releases page](https://github.com/reactlabs-dev/lsas-spec/releases)
-   - Click "Draft a new release"
-   - Create a new tag (e.g., `v1.0.0`)
-   - Add release title and description
-   - Publish the release
-5. Zenodo will automatically:
-   - Detect the new release
-   - Archive the repository snapshot
-   - Generate a unique DOI
-   - Create a DOI badge
-6. Update the DOI badge in this README with the newly generated DOI
-
-### After DOI Generation
-
-1. Copy the DOI from Zenodo
-2. Update the badge at the top of this README
-3. Update `CITATION.cff` with the DOI
-4. Commit these changes to the `main` branch
 
 ## License
 

@@ -9,7 +9,8 @@ authors:
 repository-code: "https://github.com/reactlabs-dev/lsas-spec"
 url: "https://github.com/reactlabs-dev/lsas-spec"
 license: Apache-2.0
-version: 0.1.0
+version: 1.0.0
+doi: 10.5281/zenodo.18407728
 date-released: 2026-01-28
 keywords:
   - "artificial intelligence"
