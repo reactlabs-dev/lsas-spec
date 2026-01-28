@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this specification, please cite it as below."
+type: software
+title: "LSAS Specification: Layered Safety and Accuracy System"
+abstract: "Technical specification and whitepaper for governed Generative AI outputs in regulated healthcare and medtech environments."
+authors:
+  - family-names: "React Labs"
+    name: "React Labs Development Team"
+repository-code: "https://github.com/reactlabs-dev/lsas-spec"
+url: "https://github.com/reactlabs-dev/lsas-spec"
+license: Apache-2.0
+version: 0.1.0
+date-released: 2026-01-28
+keywords:
+  - "artificial intelligence"
+  - "healthcare"
+  - "medical devices"
+  - "safety"
+  - "accuracy"
+  - "specification"
+  - "governance"
+  - "generative AI"
+  - "regulated industries"
