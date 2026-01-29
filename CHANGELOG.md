@@ -18,6 +18,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2026-01-28
+
+### Added
+- `NOTICE` — attribution notice for LSAS and project origin
+- `TRADEMARK.md` — naming guidance for “LSAS / LSAS Framework” (nominative use vs branding)
+
+### Changed
+- `README.md` — improved citation/attribution guidance and repository structure documentation
+- Documentation polish across examples/diagrams references (no specification behavior changes)
+
+### Notes
+- Documentation/attribution patch release only. No changes to LSAS schemas or core specification behavior.
+
+---
+
 ## [1.0.0] - 2026-01-28
 
 ### Added
