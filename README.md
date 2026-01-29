@@ -8,6 +8,13 @@
 
 This repository contains the formal specification, schemas, examples, and technical whitepaper for LSAS, a framework designed to ensure safety, accuracy, and compliance for AI-generated content in regulated industries.
 
+## How to Cite
+
+Preferred citation is via the DOI (Zenodo) and the metadata in [CITATION.cff](CITATION.cff).
+
+- DOI: (use the Zenodo DOI shown on your record)
+- GitHub Releases: https://github.com/reactlabs-dev/lsas-spec/releases
+
 ## Repository Structure
 
 ```
@@ -15,6 +22,9 @@ lsas-spec/
 ├── paper/          # Technical whitepaper and related documents
 ├── schemas/        # JSON schemas and specification files
 ├── examples/       # Example implementations and use cases
+├── diagrams/       # Diagrams (Mermaid sources and/or exports)
+├── NOTICE          # Attribution notice (Apache-style)
+├── TRADEMARK.md    # Naming guidance for “LSAS Framework”
 ├── CITATION.cff    # Citation metadata for academic use
 ├── CHANGELOG.md    # Version history and release notes
 ├── CONTRIBUTING.md # Contribution guidelines
@@ -46,6 +56,13 @@ If you use this specification in your research or implementation, please cite it
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Attribution & Trademark
+
+“LSAS” (Layered Safety and Accuracy System) and the term “LSAS Framework” were coined by Matt Vegas.
+
+- See [NOTICE](NOTICE) for attribution text
+- See [TRADEMARK.md](TRADEMARK.md) for naming guidance
 
 ## Contact
 
